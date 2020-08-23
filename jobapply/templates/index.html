@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Apply Job</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <h3> Total Applications are {{all_data.count}}</h3>
+        {% for data in all_data %}
+        <div class="col-md-4">
+            <div class="thumbnail">
+              <img src={{data.image.url}} class="img-thumbnail" width="250" height="250">
+              <p> <strong> {{data.first_name}} {{data.last_name}} </strong></p>
+              <p> {{data.education}} {{data.passing_year}} </p>
+              <a href="/details/?email={{data.email}}" target="_blank" class="btn btn-primary">View More Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>

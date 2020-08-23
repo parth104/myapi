@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Apply Job</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+     <!-- ADMISSION-FORM -->
+     <div class="container" style="margin-top:4rem">
+        <h1 style="margin-bottom: 3rem; color:black;">Application Form</h1>
+        <form id="job_form" action="/data/" method="POST" class="needs-validation" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" class="form-control" id="first_name" placeholder="Enter First Name" name="first_name" required>
+          </div>
+          <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" class="form-control" id="last_name" placeholder="Enter First Name" name="last_name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter First Name" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" class="form-control" id="dob" placeholder="Enter Birthdate" name="dob" required>
+          </div>
+          <div class="form-group">
+            <label for="education">Education:</label>
+            <select class="form-control" placeholder="Select Highest Education" name="education" required id="education">
+                <option hidden disabled selected>Select Highest Education</option>
+                <option>B.Tech</option>
+                <option>B.E</option>
+                <option>M.Tech</option>
+                <option>M.E</option>
+                <option>BCA</option>
+                <option>MCA</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="college_name">College Name:</label>
+            <input type="text" class="form-control" id="college_name" placeholder="Enter College Name" name="college_name" required>
+          </div>
+          <div class="form-group">
+            <label for="passing_year">Passing Year:</label>
+            <select class="form-control" placeholder="Select Passing Year" name="passing_year" required id="passing_year">
+                <option hidden disabled selected>Select Passing Year</option>
+                <option>2017</option>
+                <option>2018</option>
+                <option>2019</option>
+                <option>2020</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="about">About You:</label>
+            <input type="text" class="form-control" id="about" placeholder="Enter About you" name="about" required>
+          </div>
+          <div class="form-group">
+            <label for="image">Your Photo:</label>
+            <input type="file" class="form-file-input" id="image" name="image" required>
+            <p id="errmsg" style="color:red;"></p>
+          </div>
+          <div class="form-group">
+            <label for="resume">Your Resume:</label>
+            <input type="file" class="form-file-input" id="resume" name="resume" >
+          </div>
+          <button type="submit" class="btn btn-success">Submit</button>&nbsp;&nbsp;
+          <button type="reset" class="btn btn-danger">Reset</button>
+        </form>
+        <div id="success_msg" hidden class="alert alert-success">
+            <strong>Success!</strong> Application Submitted Successfully
+        </div>
+        <div id="err_msg" hidden class="alert alert-danger">
+            <strong>Error!</strong> Something went wrong.
+        </div>
+    </div>
+</div>
+<script>
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        console.log("hello out")
+      $('#job_form').submit(function(e){
+
+            e.preventDefault();
+            var url = $(this).attr("action");
+            var formData = new FormData(this);
+            var csrftoken = readCookie('csrftoken');
+            $.ajax({
+                type: 'POST',
+                url:url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache : false,
+                dataType: 'json',
+                headers:{"X-CSRFToken": csrftoken},
+                success: function(){
+                    $('#success_msg').show();
+                    $('#err_msg').hide();
+                },
+                error: function(res, error){
+                    $('#err_msg').show();
+                    $('#err_msg').text(res.responseText)
+                }
+            })
+      })
+    });
+</script>
+
+</body>
+</html>

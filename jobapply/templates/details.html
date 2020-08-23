@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Details</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <h1 >Applicants Details</h1>      
+    </div>
+</div>
+<div class="container">
+    {% for data in all_data %}
+    <div class="col-md-4">
+        <div class="thumbnail">
+        <img src={{data.image.url}} class="img-thumbnail" width="250" height="250">
+        </div>
+    </div>
+    
+    <label>First Name: {{data.first_name}}</label><br>
+    <label>Last Name: {{data.last_name}}</label><br>
+    <label id="email">Email: {{data.email}}</label><br>
+    <label>Education: {{data.education}}</label><br>
+    <label>College Name: {{data.college_nae}}</label><br>
+    <label>Passing Year: {{data.passing_year}}</label><br>
+    <label>Date of birth: {{data.dob}}</label><br>
+    <label>About: {{data.about}}</label><br>
+    {% if data.resume %}
+    <label>Resume: <a href="{{data.resume.url}}">click here</a></label><br>
+    {% else %}
+    <label>Resume: Not Available</a></label><br>
+    {% endif %}
+    <label>Applied On: {{data.application_date}}</label><br>
+    <label>Last updated: {{data.last_updated}}</label><br>
+    <label>Notes: <input type="text" value="{{data.notes}}" id="note"></label><br>
+    <button id="updatenote" type="submit" class="btn btn-default">Update Note</button>
+    {% endfor %}
+    <div id="success_msg" hidden class="alert alert-success">
+        <strong>Success!</strong> Note Updated Successfully
+    </div>
+    <div id="err_msg" hidden class="alert alert-danger">
+        <strong>Error!</strong> Something went wrong.
+    </div>
+    <div id="note_empty_msg" hidden class="alert alert-danger">
+        <strong>Error!</strong> Note should not be empty
+    </div>
+</div>
+<script>
+    var $ = jQuery.noConflict();
+    $(document).ready(function() {
+        console.log("hello out")
+      $('#updatenote').click(function(e){
+            if($('#note').val() == "") {
+                $('#note_empty_msg').show();
+                $('#err_msg').hide();
+                $('#success_msg').hide();
+                return False;
+            }
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url:'/update/',
+                data: {note: $('#note').val(),
+                        email: $('#email').text().split(":")[1].trim()
+                },
+                success: function(){
+                    $('#success_msg').show();
+                    $('#note_empty_msg').hide();
+                    $('#err_msg').hide();
+                },
+                error: function(){
+                    $('#err_msg').show();
+                    $('#note_empty_msg').hide();
+                }
+            })
+      })
+    });
+</script>
+</body>
+</html>
